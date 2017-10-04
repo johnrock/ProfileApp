@@ -11,6 +11,8 @@ import io.reactivex.Observable;
 public interface SearchRepository {
 
 
-    Observable<ProfileResponse> getSpecialBlend();
+    Observable<ProfileResponse> bySpecialBlend();
+
+    Observable<ProfileResponse> byMatchPercentage();
 
 }

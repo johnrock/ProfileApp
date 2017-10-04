@@ -18,7 +18,12 @@ public class SearchInteractorImpl implements SearchInteractor {
     }
 
     @Override
-    public Observable<ProfileResponse> getSpecialBlend() {
-        return searchRepository.getSpecialBlend();
+    public Observable<ProfileResponse> bySpecialBlend() {
+        return searchRepository.bySpecialBlend();
+    }
+
+    @Override
+    public Observable<ProfileResponse> byMatchPercentage() {
+        return searchRepository.byMatchPercentage();
     }
 }

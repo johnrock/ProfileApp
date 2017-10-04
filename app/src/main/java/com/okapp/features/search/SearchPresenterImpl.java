@@ -5,12 +5,13 @@ import com.okapp.data.helpers.LogHelper;
 import com.okapp.data.models.Profile;
 import com.okapp.data.models.ProfileResponse;
 import com.okapp.domain.interactors.SearchInteractor;
+import com.okapp.util.SearchType;
 
 import javax.inject.Inject;
 
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author John Piser johnpiser@yahoo.com
@@ -20,30 +21,45 @@ public class SearchPresenterImpl implements SearchPresenter {
 
 
     ViewLayer viewLayer;
+    private SearchType searchType;
     SearchInteractor searchInteractor;
     private LogHelper logHelper;
+    private final Scheduler backgroundScheduler;
+    private final Scheduler uiScheduler;
     CompositeDisposable compositeDisposable;
 
     @Inject
-    public SearchPresenterImpl(SearchInteractor searchInteractor, LogHelper logHelper) {
+    public SearchPresenterImpl(SearchInteractor searchInteractor, LogHelper logHelper, Scheduler backgroundScheduler, Scheduler uiScheduler) {
         this.searchInteractor = searchInteractor;
         this.logHelper = logHelper;
+        this.backgroundScheduler = backgroundScheduler;
+        this.uiScheduler = uiScheduler;
     }
 
     @Override
-    public void bind(ViewLayer viewLayer) {
+    public void bind(ViewLayer viewLayer, SearchType searchType) {
         this.viewLayer = viewLayer;
-        compositeDisposable = new CompositeDisposable();
+        this.searchType = searchType;
+        this.compositeDisposable = new CompositeDisposable();
 
 
         compositeDisposable.add(
-                searchInteractor.getSpecialBlend()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+                getSearchObservable()
+                .subscribeOn(backgroundScheduler)
+                .observeOn(uiScheduler)
                 .subscribe(this::refreshSpecialBlend)
         );
 
 
+    }
+
+    private Observable<ProfileResponse> getSearchObservable() {
+        switch (searchType){
+            case MATCH_PERCENTAGE:
+                return searchInteractor.byMatchPercentage();
+                default:
+                    return searchInteractor.bySpecialBlend();
+        }
     }
 
     @Override
@@ -53,14 +69,16 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     private void refreshSpecialBlend(ProfileResponse profileResponse) {
 
-        logHelper.debug(OkAppApplication.LOGTAG, "Received responses: " + profileResponse);
+        logHelper.debug(OkAppApplication.LOGTAG, "Received these responses for  : " + searchType + " : " + profileResponse);
 
         if(profileResponse != null){
             for (Profile profile : profileResponse.getData()) {
                 logHelper.debug(OkAppApplication.LOGTAG, profile.getUserName());
             }
         }
-
+        if(profileResponse != null){
+            viewLayer.loadProfiles(profileResponse.getData());
+        }
 
     }
 

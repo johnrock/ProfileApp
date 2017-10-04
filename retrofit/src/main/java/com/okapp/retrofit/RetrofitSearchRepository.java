@@ -19,8 +19,16 @@ public class RetrofitSearchRepository extends RetrofitRepository implements Sear
     }
 
     @Override
-    public Observable<ProfileResponse> getSpecialBlend(){
+    public Observable<ProfileResponse> bySpecialBlend(){
 
+        Retrofit retrofit = createRXRetrofit(API_ENDPOINT);
+        SearchAPI searchAPI = retrofit.create(SearchAPI.class);
+        return searchAPI.getSpecialBlend("matchSample.json");
+    }
+
+    @Override
+    public Observable<ProfileResponse> byMatchPercentage() {
+        //making same call for sample purposes
         Retrofit retrofit = createRXRetrofit(API_ENDPOINT);
         SearchAPI searchAPI = retrofit.create(SearchAPI.class);
         return searchAPI.getSpecialBlend("matchSample.json");

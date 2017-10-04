@@ -1,6 +1,6 @@
 package com.okapp.dagger;
 
-import com.okapp.features.search.SearchActivity;
+import com.okapp.features.search.SearchFragment;
 
 import javax.inject.Singleton;
 
@@ -13,5 +13,5 @@ import dagger.Component;
 @Singleton
 @Component(modules={AppModule.class})
 public interface AppComponent {
-    void inject (SearchActivity searchActivity);
+    void inject (SearchFragment searchFragment);
 }

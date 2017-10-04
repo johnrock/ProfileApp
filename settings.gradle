@@ -1,1 +1,1 @@
-include ':app', ':domain', ':retrofit', ':data'
+include ':app', ':domain', ':retrofit', ':data', ':picasso'

@@ -10,5 +10,7 @@ import io.reactivex.Observable;
 
 public interface SearchInteractor {
 
-    Observable<ProfileResponse> getSpecialBlend();
+    Observable<ProfileResponse> bySpecialBlend();
+
+    Observable<ProfileResponse> byMatchPercentage();
 }

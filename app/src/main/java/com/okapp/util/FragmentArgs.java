@@ -5,5 +5,6 @@ package com.okapp.util;
  */
 
 public class FragmentArgs {
-    public static final String COLOR = "color";
+
+    public static final String SEARCH_TYPE = "com.okapp.search_type";
 }
