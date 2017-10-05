@@ -1,6 +1,7 @@
 package com.okapp.features.search;
 
-import com.okapp.data.models.Profile;
+
+import com.okapp.models.Profile;
 import com.okapp.util.SearchType;
 
 import java.util.List;

@@ -1,40 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="6dp">
+
     <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:card_view="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/cardView"
-        android:layout_width="wrap_content"
+        android:id="@+id/card_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+
+        card_view:cardPreventCornerOverlap="false"
         card_view:cardBackgroundColor="@android:color/white"
-        card_view:cardElevation="2dp"
-        card_view:cardUseCompatPadding="true"
-        >
+        card_view:cardCornerRadius="0dp"
+        card_view:cardElevation="1dp"
+        card_view:cardUseCompatPadding="false">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="16dp"
-            >
+            android:gravity="center_horizontal"
+            android:layout_gravity="top">
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:scaleType="centerCrop"
                 android:layout_alignParentTop="true"
-
                 />
-
             <TextView
                 android:id="@+id/name"
+                android:layout_below="@+id/image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:textSize="30sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                style="@style/SearchResultText"
                 />
+
+            <LinearLayout
+                android:id="@+id/subheading"
+                android:layout_below="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SearchResultTextAlt"
+                    />
+
+                <TextView
+                    android:id="@+id/dot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/symbol_bullet"
+                    style="@style/SearchResultTextAlt"
+                    />
+
+                <TextView
+                    android:id="@+id/location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SearchResultTextAlt"
+                    />
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/footer"
+                android:layout_below="@+id/subheading"
+                android:layout_marginTop="10dp"
+                android:paddingBottom="12dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/matchpercentage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    style="@style/SearchResultText"
+                    />
+
+                <TextView
+                    android:id="@+id/match"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/profile_label_match"
+                    style="@style/SearchResultText"
+                    />
+            </LinearLayout>
 
         </RelativeLayout>
 
-    </android.support.v7.widget.CardView>
 
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

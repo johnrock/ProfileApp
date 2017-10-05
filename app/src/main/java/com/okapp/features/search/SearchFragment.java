@@ -13,8 +13,8 @@ import android.view.ViewGroup;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
-import com.okapp.data.models.Profile;
 import com.okapp.domain.helpers.ImageHelper;
+import com.okapp.models.Profile;
 import com.okapp.util.FragmentArgs;
 import com.okapp.util.SearchType;
 

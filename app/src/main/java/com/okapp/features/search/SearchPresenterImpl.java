@@ -1,10 +1,9 @@
 package com.okapp.features.search;
 
-import com.okapp.config.OkAppApplication;
 import com.okapp.data.helpers.LogHelper;
-import com.okapp.data.models.Profile;
 import com.okapp.data.models.ProfileResponse;
 import com.okapp.domain.interactors.SearchInteractor;
+import com.okapp.models.ProfileAdapter;
 import com.okapp.util.SearchType;
 
 import javax.inject.Inject;
@@ -19,13 +18,12 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchPresenterImpl implements SearchPresenter {
 
-
     ViewLayer viewLayer;
-    private SearchType searchType;
+    SearchType searchType;
     SearchInteractor searchInteractor;
-    private LogHelper logHelper;
-    private final Scheduler backgroundScheduler;
-    private final Scheduler uiScheduler;
+    LogHelper logHelper;
+    final Scheduler backgroundScheduler;
+    final Scheduler uiScheduler;
     CompositeDisposable compositeDisposable;
 
     @Inject
@@ -48,6 +46,7 @@ public class SearchPresenterImpl implements SearchPresenter {
                 .subscribeOn(backgroundScheduler)
                 .observeOn(uiScheduler)
                 .subscribe(this::refreshSpecialBlend)
+
         );
 
 
@@ -68,16 +67,8 @@ public class SearchPresenterImpl implements SearchPresenter {
     }
 
     private void refreshSpecialBlend(ProfileResponse profileResponse) {
-
-        logHelper.debug(OkAppApplication.LOGTAG, "Received these responses for  : " + searchType + " : " + profileResponse);
-
         if(profileResponse != null){
-            for (Profile profile : profileResponse.getData()) {
-                logHelper.debug(OkAppApplication.LOGTAG, profile.getUserName());
-            }
-        }
-        if(profileResponse != null){
-            viewLayer.loadProfiles(profileResponse.getData());
+            viewLayer.loadProfiles(new ProfileAdapter().adapt(profileResponse.getData()));
         }
 
     }

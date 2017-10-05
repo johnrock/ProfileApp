@@ -14,6 +14,9 @@ public class Location {
     @SerializedName("state_name")
     private String stateName;
 
+    @SerializedName("state_code")
+    private String stateCode;
+
     public String getCityName() {
         return cityName;
     }
@@ -22,4 +25,7 @@ public class Location {
         return stateName;
     }
 
+    public String getStateCode() {
+        return stateCode;
+    }
 }

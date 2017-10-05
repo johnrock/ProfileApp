@@ -8,8 +8,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.okapp.R;
-import com.okapp.data.models.Profile;
 import com.okapp.domain.helpers.ImageHelper;
+import com.okapp.models.Profile;
 
 import java.util.List;
 
@@ -52,6 +52,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         @BindView(R.id.name) TextView name;
         @BindView(R.id.image) ImageView imageView;
+        @BindView(R.id.age)   TextView age;
+        @BindView(R.id.location) TextView location;
+        @BindView(R.id.matchpercentage) TextView matchPercentage;
 
         public ProfileHolder(View itemView, ImageHelper imageHelper) {
             super(itemView);
@@ -63,7 +66,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         public void bind(Profile profile) {
             name.setText(profile.getUserName());
-            imageHelper.loadImage(imageView,profile.getPhoto().getFullPaths().get("large"));
+            imageHelper.loadImage(imageView,profile.getImageUrl());
+            age.setText(profile.getAge());
+            location.setText(profile.getLocation());
+            matchPercentage.setText(profile.getMatchPercentage());
         }
 
         @Override

@@ -3,4 +3,6 @@
     <string name="search_tab_special_blend">Special Blend</string>
     <string name="search_tab_match_perc">Match %</string>
     <string name="activity_title_search">Search</string>
+    <string name="profile_label_match">Match</string>
+    <string name="symbol_bullet">\u2022</string>
 </resources>
