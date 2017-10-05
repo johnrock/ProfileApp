@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,9 +34,11 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
 
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
-    @BindView(R.id.recyclerView)      RecyclerView recyclerView;
+
+    @BindView(R.id.recyclerView) RecyclerView recyclerView;
 
     SearchType searchType;
+    GridLayoutManager gridLayoutManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -69,8 +71,8 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity().getBaseContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
+        gridLayoutManager = new GridLayoutManager(getActivity().getBaseContext(), 2);
+        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
         return view;
