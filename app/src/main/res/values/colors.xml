@@ -5,4 +5,5 @@
     <color name="colorAccent">#FFFFFF</color>
 
     <color name="highlightCard">#ffffa8</color>
+    <color name="white">#ffffff</color>
 </resources>

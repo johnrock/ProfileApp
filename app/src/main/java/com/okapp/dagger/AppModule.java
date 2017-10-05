@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.okapp.BuildConfig;
 import com.okapp.data.helpers.LogHelper;
+import com.okapp.data.repositories.LikesHelper;
 import com.okapp.data.repositories.SearchRepository;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.domain.usecases.search.SearchMatchPercentageUseCase;
@@ -12,6 +13,7 @@ import com.okapp.features.search.SearchPresenter;
 import com.okapp.features.search.SearchPresenterImpl;
 import com.okapp.helpers.LogHelperImpl;
 import com.okapp.picasso.PicassoImageHelper;
+import com.okapp.repositories.LikesHelperImpl;
 import com.okapp.retrofit.RetrofitSearchRepository;
 
 import javax.inject.Singleton;
@@ -72,7 +74,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SearchMatchPercentageUseCase providesSearchMatchPercentageUseCase(SearchRepository searchRepository){
-        return new SearchMatchPercentageUseCase(searchRepository);
+    SearchMatchPercentageUseCase providesSearchMatchPercentageUseCase(SearchRepository searchRepository, LikesHelper likesHelper){
+        return new SearchMatchPercentageUseCase(searchRepository, likesHelper);
+    }
+
+    @Provides
+    @Singleton
+    LikesHelper providesLikesHelper() {
+        return new LikesHelperImpl();
     }
 }

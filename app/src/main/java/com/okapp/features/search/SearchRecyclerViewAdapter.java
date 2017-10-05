@@ -1,5 +1,6 @@
 package com.okapp.features.search;
 
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.okapp.R;
+import com.okapp.data.repositories.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 
@@ -24,16 +26,18 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
     List<Profile> profiles;
     ImageHelper imageHelper;
+    LikesHelper likesHelper;
 
-    public SearchRecyclerViewAdapter(List<Profile> profiles, ImageHelper imageHelper) {
+    public SearchRecyclerViewAdapter(List<Profile> profiles, ImageHelper imageHelper, LikesHelper likesHelper) {
         this.profiles = profiles;
         this.imageHelper = imageHelper;
+        this.likesHelper = likesHelper;
     }
 
     @Override
     public ProfileHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile, parent, false);
-        return new ProfileHolder(view, imageHelper);
+        return new ProfileHolder(view, imageHelper, likesHelper);
     }
 
     @Override
@@ -49,32 +53,52 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public static class ProfileHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final ImageHelper imageHelper;
-
+        private final LikesHelper likesHelper;
+        private String username;
+        @BindView(R.id.card_view) CardView cardView;
         @BindView(R.id.name) TextView name;
         @BindView(R.id.image) ImageView imageView;
         @BindView(R.id.age)   TextView age;
         @BindView(R.id.location) TextView location;
         @BindView(R.id.matchpercentage) TextView matchPercentage;
 
-        public ProfileHolder(View itemView, ImageHelper imageHelper) {
+        public ProfileHolder(View itemView, ImageHelper imageHelper, LikesHelper likesHelper) {
             super(itemView);
             this.imageHelper = imageHelper;
+            this.likesHelper = likesHelper;
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
 
 
         public void bind(Profile profile) {
+            this.username = profile.getUserName();
             name.setText(profile.getUserName());
             imageHelper.loadImage(imageView,profile.getImageUrl());
             age.setText(profile.getAge());
             location.setText(profile.getLocation());
             matchPercentage.setText(profile.getMatchPercentage());
+            setBackgroundColor(profile.getUserName());
+        }
+
+        private void setBackgroundColor(String userName) {
+            if(likesHelper.userIsLiked(userName)){
+                cardView.setBackgroundColor(imageView.getResources().getColor(R.color.highlightCard));
+            }
+            else{
+                cardView.setBackgroundColor(imageView.getResources().getColor(R.color.white));
+            }
         }
 
         @Override
         public void onClick(View v) {
-
+            if(likesHelper.userIsLiked(username)){
+                likesHelper.unlikeUser(username);
+            }
+            else{
+                likesHelper.likeUser(username);
+            }
+            setBackgroundColor(username);
         }
     }
 }

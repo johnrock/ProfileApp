@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
+import com.okapp.data.repositories.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 import com.okapp.util.FragmentArgs;
@@ -33,6 +34,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
 
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
+    @Inject LikesHelper likesHelper;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
@@ -79,19 +81,32 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Override
     public void onStart() {
         super.onStart();
-        searchPresenter.bind(this, searchUseCase);
+        bind();
     }
 
     @Override
     public void onStop() {
-        searchPresenter.unbind();
+        unbind();
         super.onStop();
+    }
+
+    private void bind() {
+        searchPresenter.bind(this, searchUseCase);
+    }
+
+    private void unbind() {
+        searchPresenter.unbind();
+    }
+
+    public void rebind(){
+        unbind();
+        bind();
     }
 
     @Override
     public void loadProfiles(List<Profile> profiles) {
 
-        SearchRecyclerViewAdapter searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper);
+        SearchRecyclerViewAdapter searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper, likesHelper);
         recyclerView.setAdapter(searchRecyclerViewAdapter);
     }
 }

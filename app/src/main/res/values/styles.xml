@@ -21,7 +21,7 @@
 
     </style>
     <style name="SearchResultTextAlt" parent="SearchResultText">
-        <item name="android:textColor">#FFBDBDBD</item>
+        <item name="android:textColor">#8d93a0</item>
 
     </style>
 
