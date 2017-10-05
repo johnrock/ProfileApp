@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 
 import com.okapp.R;
 import com.okapp.util.FragmentArgs;
-import com.okapp.util.SearchType;
+import com.okapp.domain.usecases.search.SearchUseCase;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -18,7 +18,6 @@ public class SearchActivity extends AppCompatActivity  {
     @BindView(R.id.toolbar)   Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tablayout)  TabLayout tabLayout;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +38,13 @@ public class SearchActivity extends AppCompatActivity  {
 
         Bundle bundle = new Bundle();
         SearchFragment fragment = new SearchFragment();
-        bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchType.SPECIAL_BLEND);
+        bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchUseCase.SPECIAL_BLEND);
         fragment.setArguments(bundle);
         adapter.addFragment(fragment, getString(R.string.search_tab_special_blend));
 
         bundle = new Bundle();
         fragment = new SearchFragment();
-        bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchType.MATCH_PERCENTAGE);
+        bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchUseCase.MATCH_PERCENTAGE);
         fragment.setArguments(bundle);
         adapter.addFragment(fragment, getString(R.string.search_tab_match_perc));
 

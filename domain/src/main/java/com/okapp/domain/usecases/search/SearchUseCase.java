@@ -1,9 +1,9 @@
-package com.okapp.util;
+package com.okapp.domain.usecases.search;
 
 /**
  * @author John Piser johnpiser@yahoo.com
  */
 
-public enum SearchType {
+public enum SearchUseCase {
     SPECIAL_BLEND, MATCH_PERCENTAGE
 }

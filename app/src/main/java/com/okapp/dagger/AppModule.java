@@ -6,8 +6,8 @@ import com.okapp.BuildConfig;
 import com.okapp.data.helpers.LogHelper;
 import com.okapp.data.repositories.SearchRepository;
 import com.okapp.domain.helpers.ImageHelper;
-import com.okapp.domain.interactors.SearchInteractor;
-import com.okapp.domain.interactors.SearchInteractorImpl;
+import com.okapp.domain.usecases.search.SearchMatchPercentageUseCase;
+import com.okapp.domain.usecases.search.SearchSpecialBlendUseCase;
 import com.okapp.features.search.SearchPresenter;
 import com.okapp.features.search.SearchPresenterImpl;
 import com.okapp.helpers.LogHelperImpl;
@@ -48,20 +48,31 @@ public class AppModule {
     }
 
     @Provides
-    SearchPresenter providesSearchPresenter(SearchInteractor searchInteractor, LogHelper logHelper){
+    SearchPresenter providesSearchPresenter(LogHelper logHelper, SearchSpecialBlendUseCase searchSpecialBlendUseCase, SearchMatchPercentageUseCase searchMatchPercentageUseCase){
         //Not a singleton. Each Fragment gets a Fresh SearchPresenter
-        return new SearchPresenterImpl(searchInteractor, logHelper, Schedulers.io(), AndroidSchedulers.mainThread());
+        return new SearchPresenterImpl(logHelper,
+                Schedulers.io(),
+                AndroidSchedulers.mainThread(),
+                searchSpecialBlendUseCase,
+                searchMatchPercentageUseCase);
     }
 
-    @Provides
-    @Singleton
-    SearchInteractor providesSearchInteractor(SearchRepository searchRepository){
-        return new SearchInteractorImpl(searchRepository);
-    }
 
     @Provides
     @Singleton
     SearchRepository providesSearchRepository(LogHelper logHelper){
         return new RetrofitSearchRepository(logHelper);
+    }
+
+    @Provides
+    @Singleton
+    SearchSpecialBlendUseCase providesSpecialBlendUseCase(SearchRepository searchRepository){
+        return new SearchSpecialBlendUseCase(searchRepository);
+    }
+
+    @Provides
+    @Singleton
+    SearchMatchPercentageUseCase providesSearchMatchPercentageUseCase(SearchRepository searchRepository){
+        return new SearchMatchPercentageUseCase(searchRepository);
     }
 }

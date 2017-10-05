@@ -16,7 +16,7 @@ import com.okapp.config.OkAppApplication;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 import com.okapp.util.FragmentArgs;
-import com.okapp.util.SearchType;
+import com.okapp.domain.usecases.search.SearchUseCase;
 
 import java.util.List;
 
@@ -31,13 +31,10 @@ import butterknife.ButterKnife;
 
 public class SearchFragment extends Fragment implements SearchPresenter.ViewLayer{
 
-
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
-
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
-
-    SearchType searchType;
+    SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
 
     @Override
@@ -46,7 +43,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
 
         Bundle arguments = getArguments();
         if (arguments != null) {
-            searchType = (SearchType) arguments.get(FragmentArgs.SEARCH_TYPE);
+            searchUseCase = (SearchUseCase) arguments.get(FragmentArgs.SEARCH_TYPE);
         }
 
     }
@@ -78,18 +75,11 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         return view;
     }
 
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-
-    }
-
 
     @Override
     public void onStart() {
         super.onStart();
-        searchPresenter.bind(this, searchType);
+        searchPresenter.bind(this, searchUseCase);
     }
 
     @Override

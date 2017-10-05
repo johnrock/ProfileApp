@@ -1,6 +1,8 @@
 package com.okapp.data.repositories;
 
-import com.okapp.data.models.ProfileResponse;
+import com.okapp.data.models.Profile;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 
@@ -11,8 +13,8 @@ import io.reactivex.Observable;
 public interface SearchRepository {
 
 
-    Observable<ProfileResponse> bySpecialBlend();
+    Observable<List<Profile>> bySpecialBlend();
 
-    Observable<ProfileResponse> byMatchPercentage();
+    Observable<List<Profile>> byMatchPercentage();
 
 }

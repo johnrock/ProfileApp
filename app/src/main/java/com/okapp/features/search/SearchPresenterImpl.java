@@ -1,14 +1,19 @@
 package com.okapp.features.search;
 
+import android.support.annotation.Nullable;
+
 import com.okapp.data.helpers.LogHelper;
-import com.okapp.data.models.ProfileResponse;
-import com.okapp.domain.interactors.SearchInteractor;
+import com.okapp.data.models.Profile;
+import com.okapp.domain.usecases.UseCase;
+import com.okapp.domain.usecases.search.SearchMatchPercentageUseCase;
+import com.okapp.domain.usecases.search.SearchSpecialBlendUseCase;
+import com.okapp.domain.usecases.search.SearchUseCase;
 import com.okapp.models.ProfileAdapter;
-import com.okapp.util.SearchType;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.CompositeDisposable;
 
@@ -18,47 +23,59 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchPresenterImpl implements SearchPresenter {
 
+    final SearchSpecialBlendUseCase searchSpecialBlendUseCase;
+    final SearchMatchPercentageUseCase searchMatchPercentageUseCase;
+
     ViewLayer viewLayer;
-    SearchType searchType;
-    SearchInteractor searchInteractor;
+
+    SearchUseCase searchUseCase;
     LogHelper logHelper;
     final Scheduler backgroundScheduler;
     final Scheduler uiScheduler;
     CompositeDisposable compositeDisposable;
 
+
     @Inject
-    public SearchPresenterImpl(SearchInteractor searchInteractor, LogHelper logHelper, Scheduler backgroundScheduler, Scheduler uiScheduler) {
-        this.searchInteractor = searchInteractor;
+    public SearchPresenterImpl(LogHelper logHelper,
+                               Scheduler backgroundScheduler, Scheduler uiScheduler,
+                               SearchSpecialBlendUseCase searchSpecialBlendUseCase,
+                               SearchMatchPercentageUseCase searchMatchPercentageUseCase) {
+
+        this.searchSpecialBlendUseCase = searchSpecialBlendUseCase;
+        this.searchMatchPercentageUseCase = searchMatchPercentageUseCase;
         this.logHelper = logHelper;
         this.backgroundScheduler = backgroundScheduler;
         this.uiScheduler = uiScheduler;
     }
 
     @Override
-    public void bind(ViewLayer viewLayer, SearchType searchType) {
+    public void bind(ViewLayer viewLayer, SearchUseCase searchUseCase) {
         this.viewLayer = viewLayer;
-        this.searchType = searchType;
+        this.searchUseCase = searchUseCase;
         this.compositeDisposable = new CompositeDisposable();
 
+        UseCase<List<Profile>> useCase = getUseCase(searchUseCase);
 
-        compositeDisposable.add(
-                getSearchObservable()
-                .subscribeOn(backgroundScheduler)
-                .observeOn(uiScheduler)
-                .subscribe(this::refreshSpecialBlend)
+        if (useCase != null) {
+            compositeDisposable.add(
+                    useCase.execute()
+                            .subscribeOn(backgroundScheduler)
+                            .observeOn(uiScheduler)
+                            .subscribe(this::showData)
 
-        );
-
-
+            );
+        }
     }
 
-    private Observable<ProfileResponse> getSearchObservable() {
-        switch (searchType){
+    @Nullable
+    private UseCase<List<Profile>> getUseCase(SearchUseCase searchUseCase) {
+        switch (searchUseCase){
+            case SPECIAL_BLEND:
+                return searchSpecialBlendUseCase;
             case MATCH_PERCENTAGE:
-                return searchInteractor.byMatchPercentage();
-                default:
-                    return searchInteractor.bySpecialBlend();
+                return searchMatchPercentageUseCase;
         }
+        return null;
     }
 
     @Override
@@ -66,9 +83,9 @@ public class SearchPresenterImpl implements SearchPresenter {
         compositeDisposable.dispose();
     }
 
-    private void refreshSpecialBlend(ProfileResponse profileResponse) {
-        if(profileResponse != null){
-            viewLayer.loadProfiles(new ProfileAdapter().adapt(profileResponse.getData()));
+    private void showData(List<Profile> profiles) {
+        if(profiles != null){
+            viewLayer.loadProfiles(new ProfileAdapter().adapt(profiles));
         }
 
     }

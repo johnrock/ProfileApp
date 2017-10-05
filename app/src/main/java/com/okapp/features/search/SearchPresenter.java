@@ -2,7 +2,7 @@ package com.okapp.features.search;
 
 
 import com.okapp.models.Profile;
-import com.okapp.util.SearchType;
+import com.okapp.domain.usecases.search.SearchUseCase;
 
 import java.util.List;
 
@@ -16,6 +16,8 @@ public interface SearchPresenter {
         void loadProfiles(List<Profile> profiles);
     }
 
-    void bind(ViewLayer viewLayer, SearchType searchType);
+    void bind(ViewLayer viewLayer, SearchUseCase searchUseCase);
+
+
     void unbind();
 }
