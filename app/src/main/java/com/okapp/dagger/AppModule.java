@@ -8,8 +8,10 @@ import com.okapp.data.helpers.LikesHelper;
 import com.okapp.data.repositories.SearchRepository;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.domain.helpers.PreferencesHelper;
+import com.okapp.domain.usecases.UseCaseExecutor;
 import com.okapp.domain.usecases.search.SearchMatchPercentageUseCase;
 import com.okapp.domain.usecases.search.SearchSpecialBlendUseCase;
+import com.okapp.domain.usecases.search.UseCaseExecutorImpl;
 import com.okapp.features.search.SearchPresenter;
 import com.okapp.features.search.SearchPresenterImpl;
 import com.okapp.helpers.LogHelperImpl;
@@ -59,13 +61,13 @@ public class AppModule {
 
 
     @Provides
-    SearchPresenter providesSearchPresenter(LogHelper logHelper, SearchSpecialBlendUseCase searchSpecialBlendUseCase, SearchMatchPercentageUseCase searchMatchPercentageUseCase){
+    SearchPresenter providesSearchPresenter(LogHelper logHelper, UseCaseExecutor useCaseExecutor){
+
         //Not a singleton. Each Fragment gets a Fresh SearchPresenter
         return new SearchPresenterImpl(logHelper,
                 Schedulers.io(),
                 AndroidSchedulers.mainThread(),
-                searchSpecialBlendUseCase,
-                searchMatchPercentageUseCase);
+                useCaseExecutor);
     }
 
 
@@ -93,5 +95,13 @@ public class AppModule {
     @Singleton
     LikesHelper providesLikesHelper(PreferencesHelper preferenceHelper) {
         return new LikesHelperImpl(preferenceHelper);
+    }
+
+    @Provides
+    @Singleton
+    UseCaseExecutor providesUseCaseObservableFactory(SearchSpecialBlendUseCase searchSpecialBlendUseCase,
+                                                     SearchMatchPercentageUseCase searchMatchPercentageUseCase){
+        return new UseCaseExecutorImpl(searchSpecialBlendUseCase, searchMatchPercentageUseCase);
+
     }
 }

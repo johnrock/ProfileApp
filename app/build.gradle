@@ -26,6 +26,16 @@ android {
         exclude 'META-INF/rxjava.properties'
 
     }
+
+    android.testOptions.unitTests.all {
+
+        maxHeapSize = '2048m'
+        ignoreFailures false
+
+        testLogging {
+            events "PASSED", "FAILED", "SKIPPED"
+        }
+    }
 }
 
 dependencies {
@@ -50,6 +60,8 @@ dependencies {
     implementation libraries.rxAndroid
 
     testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.1.0'
+
     androidTestImplementation('com.android.support.test.espresso:espresso-core:3.0.1', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })

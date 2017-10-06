@@ -17,6 +17,14 @@ public class Profile {
     private Location location;
     private Photo photo;
 
+    public Profile() {
+    }
+
+    //For Testing
+    public Profile(String username) {
+        this.userName =  username;
+    }
+
     public String getUserId() {
         return userId;
     }

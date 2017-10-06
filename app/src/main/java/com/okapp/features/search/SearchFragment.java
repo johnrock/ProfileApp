@@ -38,7 +38,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
-    private SearchRecyclerViewAdapter searchRecyclerViewAdapter;
+    SearchRecyclerViewAdapter searchRecyclerViewAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
