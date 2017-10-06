@@ -42,7 +42,7 @@ public class SearchViewPagerAdapter extends FragmentPagerAdapter {
 
     public void refreshFragments() {
         for (SearchFragment searchFragment : fragmentList) {
-            searchFragment.rebind();
+            searchFragment.bind();
         }
     }
 }

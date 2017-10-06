@@ -78,7 +78,6 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         return view;
     }
 
-
     @Override
     public void onStart() {
         super.onStart();
@@ -91,17 +90,12 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         super.onStop();
     }
 
-    private void bind() {
+    protected void bind() {
         searchPresenter.bind(this, searchUseCase);
     }
 
-    private void unbind() {
+    protected void unbind() {
         searchPresenter.unbind();
-    }
-
-    public void rebind(){
-        unbind();
-        bind();
     }
 
     @Override
@@ -117,7 +111,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     }
 
     @Override
-    public void refreshTab() {
+    public void refresh() {
         FragmentActivity activity = getActivity();
         if(activity != null)
         ((SearchActivity) activity).refreshTabs();

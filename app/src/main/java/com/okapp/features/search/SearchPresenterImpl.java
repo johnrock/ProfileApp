@@ -52,7 +52,11 @@ public class SearchPresenterImpl implements SearchPresenter {
     public void bind(ViewLayer viewLayer, SearchUseCase searchUseCase) {
         this.viewLayer = viewLayer;
         this.searchUseCase = searchUseCase;
-        this.compositeDisposable = new CompositeDisposable();
+
+        if(compositeDisposable != null){
+            compositeDisposable.dispose();
+        }
+        compositeDisposable = new CompositeDisposable();
 
         UseCase<List<Profile>> useCase = getUseCase(searchUseCase);
 

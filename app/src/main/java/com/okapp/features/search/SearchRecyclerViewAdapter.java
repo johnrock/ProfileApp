@@ -25,7 +25,7 @@ import butterknife.ButterKnife;
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ProfileHolder> {
 
     interface  TabRefreshListener {
-        void refreshTab();
+        void refresh();
     }
 
     List<Profile> profiles;
@@ -115,7 +115,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             else{
                 likesHelper.likeUser(username);
             }
-            tabRefreshListener.refreshTab();
+            tabRefreshListener.refresh();
         }
 
     }
