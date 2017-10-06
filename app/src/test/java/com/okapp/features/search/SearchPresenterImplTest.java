@@ -32,6 +32,7 @@ public class SearchPresenterImplTest {
     public static final String CRAZYGIRL = "crazygirl";
     public static final String DOPEGUY = "dopeguy";
     public static final String RADDUDE = "raddude";
+
     SearchPresenterImpl searchPresenter;
 
     @Mock LogHelper logHelper;
