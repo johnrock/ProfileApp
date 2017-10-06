@@ -9,7 +9,7 @@ import android.net.NetworkInfo;
 
 public class NetworkHelper {
 
-    public static boolean networkAvailable(ConnectivityManager connectivityManager) {
+    public boolean networkAvailable(ConnectivityManager connectivityManager) {
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
