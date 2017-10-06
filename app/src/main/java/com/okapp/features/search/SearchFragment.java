@@ -82,7 +82,8 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
 
-        gridLayoutManager = new GridLayoutManager(getActivity().getBaseContext(), 2);
+        int gridColumns = getResources().getInteger(R.integer.search_results_grid_columns);
+        gridLayoutManager = new GridLayoutManager(getActivity().getBaseContext(), gridColumns);
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
