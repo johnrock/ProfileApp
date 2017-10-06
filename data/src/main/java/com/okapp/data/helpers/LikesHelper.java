@@ -1,4 +1,4 @@
-package com.okapp.data.repositories;
+package com.okapp.data.helpers;
 
 /**
  * @author John Piser johnpiser@yahoo.com

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
-import com.okapp.data.repositories.LikesHelper;
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 import com.okapp.util.FragmentArgs;

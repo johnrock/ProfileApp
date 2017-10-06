@@ -2,7 +2,7 @@ package com.okapp.domain.usecases.search;
 
 import com.okapp.data.helpers.LogHelper;
 import com.okapp.data.models.Profile;
-import com.okapp.data.repositories.LikesHelper;
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.data.repositories.SearchRepository;
 import com.okapp.domain.usecases.UseCase;
 import com.okapp.domain.util.LibraryConstants;

@@ -1,6 +1,6 @@
-package com.okapp.repositories;
+package com.okapp.helpers;
 
-import com.okapp.data.repositories.LikesHelper;
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.PreferencesHelper;
 
 import java.util.Set;

@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.okapp.BuildConfig;
 import com.okapp.data.helpers.LogHelper;
-import com.okapp.data.repositories.LikesHelper;
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.data.repositories.SearchRepository;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.domain.helpers.PreferencesHelper;
@@ -15,7 +15,7 @@ import com.okapp.features.search.SearchPresenterImpl;
 import com.okapp.helpers.LogHelperImpl;
 import com.okapp.helpers.PreferencesHelperImpl;
 import com.okapp.picasso.PicassoImageHelper;
-import com.okapp.repositories.LikesHelperImpl;
+import com.okapp.helpers.LikesHelperImpl;
 import com.okapp.retrofit.RetrofitSearchRepository;
 
 import javax.inject.Singleton;

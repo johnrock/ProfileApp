@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.okapp.R;
-import com.okapp.data.repositories.LikesHelper;
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 
