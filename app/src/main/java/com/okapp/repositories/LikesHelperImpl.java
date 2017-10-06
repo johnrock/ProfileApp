@@ -1,8 +1,8 @@
 package com.okapp.repositories;
 
 import com.okapp.data.repositories.LikesHelper;
+import com.okapp.domain.helpers.PreferencesHelper;
 
-import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -11,10 +11,13 @@ import java.util.Set;
 
 public class LikesHelperImpl implements LikesHelper {
 
+    public static final String LIKES_PREFERENCEKEY = "com.okapp.likes.preferencekey";
     Set<String> likes;
+    private PreferencesHelper preferencesHelper;
 
-    public LikesHelperImpl() {
-        likes = new HashSet<>();
+    public LikesHelperImpl(PreferencesHelper preferencesHelper) {
+        this.preferencesHelper = preferencesHelper;
+        likes = preferencesHelper.getStringSet(LIKES_PREFERENCEKEY);
     }
 
     @Override
@@ -23,12 +26,18 @@ public class LikesHelperImpl implements LikesHelper {
     }
 
     @Override
-    public void likeUser(String username) {
+    public synchronized void likeUser(String username) {
         likes.add(username);
+        save();
     }
 
     @Override
-    public void unlikeUser(String username) {
+    public synchronized void unlikeUser(String username) {
         likes.remove(username);
+        save();
+    }
+
+    private void save() {
+        preferencesHelper.putStringSet(LIKES_PREFERENCEKEY, likes);
     }
 }
