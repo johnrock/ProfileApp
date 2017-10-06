@@ -15,4 +15,7 @@ public interface SearchAPI {
 
     @GET
     Observable<ProfileResponse> getSpecialBlend(@Url String url);
+
+    @GET
+    Observable<ProfileResponse> getMatchPercentage(@Url String url);
 }

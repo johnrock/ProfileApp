@@ -18,6 +18,7 @@ public class SearchActivity extends AppCompatActivity  {
     @BindView(R.id.toolbar)   Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;
     @BindView(R.id.tablayout)  TabLayout tabLayout;
+    private SearchViewPagerAdapter searchViewPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +26,6 @@ public class SearchActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_search);
 
         ButterKnife.bind(this);
-
-        //TODO: configuring the toolbar should possibly be done by the fragment's presenter
         toolbar.setTitle(getString(R.string.activity_title_search));
         setSupportActionBar(toolbar);
         init();
@@ -34,21 +33,21 @@ public class SearchActivity extends AppCompatActivity  {
 
     private void init() {
 
-        SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getSupportFragmentManager());
+        searchViewPagerAdapter = new SearchViewPagerAdapter(getSupportFragmentManager());
 
         Bundle bundle = new Bundle();
         SearchFragment fragment = new SearchFragment();
         bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchUseCase.SPECIAL_BLEND);
         fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.search_tab_special_blend));
+        searchViewPagerAdapter.addFragment(fragment, getString(R.string.search_tab_special_blend));
 
         bundle = new Bundle();
         fragment = new SearchFragment();
         bundle.putSerializable(FragmentArgs.SEARCH_TYPE, SearchUseCase.MATCH_PERCENTAGE);
         fragment.setArguments(bundle);
-        adapter.addFragment(fragment, getString(R.string.search_tab_match_perc));
+        searchViewPagerAdapter.addFragment(fragment, getString(R.string.search_tab_match_perc));
 
-        viewPager.setAdapter(adapter);
+        viewPager.setAdapter(searchViewPagerAdapter);
         tabLayout.setupWithViewPager(viewPager);
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -68,6 +67,10 @@ public class SearchActivity extends AppCompatActivity  {
             }
         });
 
+    }
+
+    public void refreshTabs(){
+        searchViewPagerAdapter.refreshFragments();
     }
 
 }

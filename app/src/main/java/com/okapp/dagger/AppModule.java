@@ -68,14 +68,16 @@ public class AppModule {
 
     @Provides
     @Singleton
-    SearchSpecialBlendUseCase providesSpecialBlendUseCase(SearchRepository searchRepository){
-        return new SearchSpecialBlendUseCase(searchRepository);
+    SearchSpecialBlendUseCase providesSpecialBlendUseCase(SearchRepository searchRepository, LogHelper logHelper){
+        return new SearchSpecialBlendUseCase(searchRepository, logHelper);
     }
 
     @Provides
     @Singleton
-    SearchMatchPercentageUseCase providesSearchMatchPercentageUseCase(SearchRepository searchRepository, LikesHelper likesHelper){
-        return new SearchMatchPercentageUseCase(searchRepository, likesHelper);
+    SearchMatchPercentageUseCase providesSearchMatchPercentageUseCase(SearchRepository searchRepository,
+                                                                      LikesHelper likesHelper,
+                                                                      LogHelper logHelper){
+        return new SearchMatchPercentageUseCase(searchRepository, likesHelper, logHelper);
     }
 
     @Provides

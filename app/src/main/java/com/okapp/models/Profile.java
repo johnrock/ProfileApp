@@ -10,7 +10,6 @@ public class Profile {
     private String matchPercentage;
     private String age;
     private String location;
-    private boolean liked;
     private String imageUrl;
 
     public String getLocation() {
@@ -44,14 +43,6 @@ public class Profile {
 
     public void setAge(String age) {
         this.age = age;
-    }
-
-    public boolean isLiked() {
-        return liked;
-    }
-
-    public void setLiked(boolean liked) {
-        this.liked = liked;
     }
 
     public String getImageUrl() {

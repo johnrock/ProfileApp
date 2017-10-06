@@ -13,7 +13,7 @@ import java.util.List;
 
 public class SearchViewPagerAdapter extends FragmentPagerAdapter {
 
-    private final List<Fragment> fragmentList = new ArrayList<>();
+    private final List<SearchFragment> fragmentList = new ArrayList<>();
     private final List<String> titleList      = new ArrayList<>();
 
     public SearchViewPagerAdapter(FragmentManager fragmentManager) {
@@ -35,8 +35,14 @@ public class SearchViewPagerAdapter extends FragmentPagerAdapter {
         return titleList.get(position);
     }
 
-    public void addFragment(Fragment fragment, String title){
+    public void addFragment(SearchFragment fragment, String title){
         fragmentList.add(fragment);
         titleList.add(title);
+    }
+
+    public void refreshFragments() {
+        for (SearchFragment searchFragment : fragmentList) {
+            searchFragment.rebind();
+        }
     }
 }

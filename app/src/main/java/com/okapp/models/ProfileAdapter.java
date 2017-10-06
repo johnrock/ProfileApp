@@ -30,8 +30,6 @@ public class ProfileAdapter {
                         .append(location.getStateCode());
                 profile.setLocation(builder.toString());
             }
-
-            profile.setLiked(p.isLiked());
             profile.setMatchPercentage(Math.round(p.getMatch() / 100) + PERCENT_SYMBOL);
             Photo photo = p.getPhoto();
             if (photo != null) {

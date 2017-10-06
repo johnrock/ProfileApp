@@ -17,7 +17,5 @@ public interface SearchPresenter {
     }
 
     void bind(ViewLayer viewLayer, SearchUseCase searchUseCase);
-
-
     void unbind();
 }

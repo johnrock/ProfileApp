@@ -29,17 +29,17 @@ public class RetrofitSearchRepository extends RetrofitRepository implements Sear
         Retrofit retrofit = createRXRetrofit(API_ENDPOINT);
         SearchAPI searchAPI = retrofit.create(SearchAPI.class);
         return searchAPI.getSpecialBlend(ENDPOINT_SPECIALBLEND)
-                .map(p->p.getData());
+                        .map(p -> p.getData());
     }
 
     @Override
     public Observable<List<Profile>> byMatchPercentage() {
-        //making same call for sample purposes
+
         Retrofit retrofit = createRXRetrofit(API_ENDPOINT);
         SearchAPI searchAPI = retrofit.create(SearchAPI.class);
 
-        return searchAPI.getSpecialBlend(ENDPOINT_MATCHPERCENTAGE)
-        .map(p -> p.getData());
+        return searchAPI.getMatchPercentage(ENDPOINT_MATCHPERCENTAGE)
+                        .map(p -> p.getData());
 
 
     }

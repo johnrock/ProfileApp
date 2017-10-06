@@ -30,7 +30,7 @@ import butterknife.ButterKnife;
  * @author John Piser johnpiser@yahoo.com
  */
 
-public class SearchFragment extends Fragment implements SearchPresenter.ViewLayer{
+public class SearchFragment extends Fragment implements SearchPresenter.ViewLayer, SearchRecyclerViewAdapter.TabRefreshListener{
 
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
@@ -38,6 +38,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
+    private SearchRecyclerViewAdapter searchRecyclerViewAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -106,7 +107,19 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Override
     public void loadProfiles(List<Profile> profiles) {
 
-        SearchRecyclerViewAdapter searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper, likesHelper);
-        recyclerView.setAdapter(searchRecyclerViewAdapter);
+        if(searchRecyclerViewAdapter == null){
+            searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper, likesHelper, this);
+            recyclerView.setAdapter(searchRecyclerViewAdapter);
+        }
+        else{
+            searchRecyclerViewAdapter.updateData(profiles);
+        }
+    }
+
+    @Override
+    public void refreshTab() {
+        FragmentActivity activity = getActivity();
+        if(activity != null)
+        ((SearchActivity) activity).refreshTabs();
     }
 }
