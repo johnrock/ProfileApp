@@ -15,6 +15,7 @@ import com.okapp.domain.usecases.search.UseCaseExecutorImpl;
 import com.okapp.features.search.SearchPresenter;
 import com.okapp.features.search.SearchPresenterImpl;
 import com.okapp.helpers.LogHelperImpl;
+import com.okapp.helpers.NetworkHelper;
 import com.okapp.helpers.PreferencesHelperImpl;
 import com.okapp.picasso.PicassoImageHelper;
 import com.okapp.helpers.LikesHelperImpl;
@@ -103,5 +104,11 @@ public class AppModule {
                                                      SearchMatchPercentageUseCase searchMatchPercentageUseCase){
         return new UseCaseExecutorImpl(searchSpecialBlendUseCase, searchMatchPercentageUseCase);
 
+    }
+
+    @Provides
+    @Singleton
+    NetworkHelper providesNetworkHelper(){
+        return new NetworkHelper();
     }
 }

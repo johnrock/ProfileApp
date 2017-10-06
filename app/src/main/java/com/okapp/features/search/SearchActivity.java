@@ -7,13 +7,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.okapp.R;
-import com.okapp.util.FragmentArgs;
 import com.okapp.domain.usecases.search.SearchUseCase;
+import com.okapp.util.FragmentArgs;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SearchActivity extends AppCompatActivity  {
+public class SearchActivity extends AppCompatActivity {
 
     @BindView(R.id.toolbar)   Toolbar toolbar;
     @BindView(R.id.viewpager) ViewPager viewPager;

@@ -1,6 +1,7 @@
 package com.okapp.features.search;
 
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,14 +12,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
 import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
+import com.okapp.domain.usecases.search.SearchUseCase;
+import com.okapp.helpers.NetworkHelper;
 import com.okapp.models.Profile;
 import com.okapp.util.FragmentArgs;
-import com.okapp.domain.usecases.search.SearchUseCase;
 
 import java.util.List;
 
@@ -36,11 +39,14 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
     @Inject LikesHelper likesHelper;
+    @Inject NetworkHelper networkHelper;
+
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.progressBar)   ProgressBar progressBar;
     SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
     SearchRecyclerViewAdapter searchRecyclerViewAdapter;
+    private ConnectivityManager connectivityManager;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -51,6 +57,8 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
             searchUseCase = (SearchUseCase) arguments.get(FragmentArgs.SEARCH_TYPE);
         }
 
+
+
     }
 
     @Override
@@ -58,6 +66,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         FragmentActivity activity = getActivity();
         if(activity!= null){
             ((OkAppApplication)activity.getApplication()).getAppComponent().inject(this);
+            connectivityManager = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
         }
         else{
             //TODO: handle this state in a base class
@@ -93,7 +102,12 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     }
 
     protected void bind() {
-        searchPresenter.bind(this, searchUseCase);
+        if(networkHelper.networkAvailable(connectivityManager)){
+            searchPresenter.bind(this, searchUseCase);
+        }
+        else{
+            Toast.makeText(getContext(),R.string.message_check_internet_connection, Toast.LENGTH_LONG).show();
+        }
     }
 
     protected void unbind() {

@@ -58,7 +58,9 @@ public class SearchPresenterImpl implements SearchPresenter {
 
     @Override
     public void unbind() {
-        compositeDisposable.dispose();
+        if(compositeDisposable != null){
+            compositeDisposable.dispose();
+        }
     }
 
     protected void showData(List<Profile> profiles) {
