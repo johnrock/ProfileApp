@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
@@ -36,6 +37,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Inject ImageHelper imageHelper;
     @Inject LikesHelper likesHelper;
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
+    @BindView(R.id.progressBar)   ProgressBar progressBar;
     SearchUseCase searchUseCase;
     GridLayoutManager gridLayoutManager;
     SearchRecyclerViewAdapter searchRecyclerViewAdapter;
@@ -111,9 +113,21 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     }
 
     @Override
+    public void toggleLoading(boolean loading) {
+        if(loading){
+            progressBar.setVisibility(View.VISIBLE);
+        }
+        else{
+            progressBar.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
     public void refresh() {
         FragmentActivity activity = getActivity();
         if(activity != null)
         ((SearchActivity) activity).refreshTabs();
     }
+
+
 }

@@ -42,6 +42,8 @@ public class SearchPresenterImpl implements SearchPresenter {
     public void bind(ViewLayer viewLayer, SearchUseCase searchUseCase) {
         this.viewLayer = viewLayer;
 
+        viewLayer.toggleLoading(true);
+
         if(compositeDisposable != null){
             compositeDisposable.dispose();
         }
@@ -59,9 +61,10 @@ public class SearchPresenterImpl implements SearchPresenter {
         compositeDisposable.dispose();
     }
 
-    private void showData(List<Profile> profiles) {
+    protected void showData(List<Profile> profiles) {
         if(profiles != null){
             viewLayer.loadProfiles(new ProfileAdapter().adapt(profiles));
         }
+        viewLayer.toggleLoading(false);
     }
 }

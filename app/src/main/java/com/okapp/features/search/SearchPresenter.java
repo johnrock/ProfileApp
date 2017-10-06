@@ -14,6 +14,7 @@ public interface SearchPresenter {
 
     interface ViewLayer {
         void loadProfiles(List<Profile> profiles);
+        void toggleLoading(boolean loading);
     }
 
     void bind(ViewLayer viewLayer, SearchUseCase searchUseCase);

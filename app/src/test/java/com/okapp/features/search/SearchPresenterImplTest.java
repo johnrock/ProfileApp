@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
@@ -75,6 +76,20 @@ public class SearchPresenterImplTest {
         searchPresenter.unbind();
 
         assertTrue(searchPresenter.compositeDisposable.isDisposed());
+    }
+
+    @Test
+    public void shouldToggleLoadingOnFromBind(){
+        searchPresenter.bind(viewLayer, SearchUseCase.SPECIAL_BLEND);
+        verify(viewLayer).toggleLoading(true);
+    }
+
+    @Test
+    public void shouldToggleLoadingOffAfterShowingData(){
+        SearchPresenter.ViewLayer mockViewLayer = Mockito.mock(SearchPresenter.ViewLayer.class);
+        searchPresenter.viewLayer = mockViewLayer;
+        searchPresenter.showData(makeObservableData());
+        verify(mockViewLayer).toggleLoading(false);
     }
 
     @Test
