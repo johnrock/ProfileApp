@@ -1,5 +1,6 @@
 package com.okapp.features.search;
 
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.data.helpers.LogHelper;
 import com.okapp.data.models.Profile;
 import com.okapp.domain.usecases.UseCaseExecutor;
@@ -24,18 +25,21 @@ public class SearchPresenterImpl implements SearchPresenter {
     final Scheduler backgroundScheduler;
     final Scheduler uiScheduler;
     UseCaseExecutor useCaseExecutor;
+    private LikesHelper likesHelper;
     CompositeDisposable compositeDisposable;
 
     @Inject
     public SearchPresenterImpl(LogHelper logHelper,
                                Scheduler backgroundScheduler,
                                Scheduler uiScheduler,
-                               UseCaseExecutor useCaseExecutor) {
+                               UseCaseExecutor useCaseExecutor,
+                               LikesHelper likesHelper) {
 
         this.logHelper = logHelper;
         this.backgroundScheduler = backgroundScheduler;
         this.uiScheduler = uiScheduler;
         this.useCaseExecutor = useCaseExecutor;
+        this.likesHelper = likesHelper;
     }
 
     @Override
@@ -61,6 +65,22 @@ public class SearchPresenterImpl implements SearchPresenter {
         if(compositeDisposable != null){
             compositeDisposable.dispose();
         }
+    }
+
+    @Override
+    public void setLikedStateForUser(String username) {
+        if(likesHelper.userIsLiked(username)){
+            likesHelper.unlikeUser(username);
+        }
+        else{
+            likesHelper.likeUser(username);
+        }
+        viewLayer.refresh();
+    }
+
+    @Override
+    public boolean userIsLiked(String username) {
+        return likesHelper.userIsLiked(username);
     }
 
     protected void showData(List<Profile> profiles) {

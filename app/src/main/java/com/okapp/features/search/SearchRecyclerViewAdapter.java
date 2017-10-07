@@ -9,7 +9,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.okapp.R;
-import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.models.Profile;
 
@@ -24,29 +23,29 @@ import butterknife.ButterKnife;
 
 public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecyclerViewAdapter.ProfileHolder> {
 
-    interface  TabRefreshListener {
-        void refresh();
+    interface AdapterResponder {
+        void onProfileTapped(String username);
+        boolean userIsLiked(String username);
     }
 
     List<Profile> profiles;
     ImageHelper imageHelper;
-    LikesHelper likesHelper;
-    private TabRefreshListener tabRefreshListener;
+    AdapterResponder adapterResponder;
+
 
     public SearchRecyclerViewAdapter(List<Profile> profiles,
                                      ImageHelper imageHelper,
-                                     LikesHelper likesHelper,
-                                     TabRefreshListener tabRefreshListener) {
+                                     AdapterResponder adapterResponder) {
         this.profiles = profiles;
         this.imageHelper = imageHelper;
-        this.likesHelper = likesHelper;
-        this.tabRefreshListener = tabRefreshListener;
+        this.adapterResponder = adapterResponder;
+
     }
 
     @Override
     public ProfileHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_profile, parent, false);
-        return new ProfileHolder(view, imageHelper, likesHelper, tabRefreshListener);
+        return new ProfileHolder(view, imageHelper, adapterResponder);
     }
 
     @Override
@@ -67,9 +66,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
     public static class ProfileHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private final ImageHelper imageHelper;
-        private final LikesHelper likesHelper;
-        private final TabRefreshListener tabRefreshListener;
+        private final AdapterResponder adapterResponder;
         private String username;
+
         @BindView(R.id.card_view) CardView cardView;
         @BindView(R.id.name) TextView name;
         @BindView(R.id.image) ImageView imageView;
@@ -77,11 +76,13 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         @BindView(R.id.location) TextView location;
         @BindView(R.id.matchpercentage) TextView matchPercentage;
 
-        public ProfileHolder(View itemView, ImageHelper imageHelper, LikesHelper likesHelper, TabRefreshListener tabRefreshListener) {
+        public ProfileHolder(View itemView,
+                             ImageHelper imageHelper,
+                             AdapterResponder adapterResponder) {
             super(itemView);
             this.imageHelper = imageHelper;
-            this.likesHelper = likesHelper;
-            this.tabRefreshListener = tabRefreshListener;
+            this.adapterResponder = adapterResponder;
+
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
         }
@@ -99,7 +100,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         }
 
         private void setBackgroundColor(String userName) {
-            if(likesHelper.userIsLiked(userName)){
+            if(adapterResponder.userIsLiked(username)){
                 cardView.setBackgroundColor(imageView.getResources().getColor(R.color.highlightCard));
             }
             else{
@@ -109,13 +110,7 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
 
         @Override
         public void onClick(View v) {
-            if(likesHelper.userIsLiked(username)){
-                likesHelper.unlikeUser(username);
-            }
-            else{
-                likesHelper.likeUser(username);
-            }
-            tabRefreshListener.refresh();
+           adapterResponder.onProfileTapped(username);
         }
 
     }

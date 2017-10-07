@@ -62,13 +62,16 @@ public class AppModule {
 
 
     @Provides
-    SearchPresenter providesSearchPresenter(LogHelper logHelper, UseCaseExecutor useCaseExecutor){
+    SearchPresenter providesSearchPresenter(LogHelper logHelper,
+                                            UseCaseExecutor useCaseExecutor,
+                                            LikesHelper likesHelper){
 
         //Not a singleton. Each Fragment gets a Fresh SearchPresenter
         return new SearchPresenterImpl(logHelper,
                 Schedulers.io(),
                 AndroidSchedulers.mainThread(),
-                useCaseExecutor);
+                useCaseExecutor,
+                likesHelper);
     }
 
 
@@ -100,7 +103,7 @@ public class AppModule {
 
     @Provides
     @Singleton
-    UseCaseExecutor providesUseCaseObservableFactory(SearchSpecialBlendUseCase searchSpecialBlendUseCase,
+    UseCaseExecutor providesUseCaseExecutor(SearchSpecialBlendUseCase searchSpecialBlendUseCase,
                                                      SearchMatchPercentageUseCase searchMatchPercentageUseCase){
         return new UseCaseExecutorImpl(searchSpecialBlendUseCase, searchMatchPercentageUseCase);
 

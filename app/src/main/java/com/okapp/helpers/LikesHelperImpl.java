@@ -12,7 +12,7 @@ import java.util.Set;
 public class LikesHelperImpl implements LikesHelper {
 
     public static final String LIKES_PREFERENCEKEY = "com.okapp.likes.preferencekey";
-    Set<String> likes;
+    private final Set<String> likes;
     private PreferencesHelper preferencesHelper;
 
     public LikesHelperImpl(PreferencesHelper preferencesHelper) {

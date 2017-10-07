@@ -15,8 +15,11 @@ public interface SearchPresenter {
     interface ViewLayer {
         void loadProfiles(List<Profile> profiles);
         void toggleLoading(boolean loading);
+        void refresh();
     }
 
     void bind(ViewLayer viewLayer, SearchUseCase searchUseCase);
     void unbind();
+    void setLikedStateForUser(String username);
+    boolean userIsLiked(String username);
 }

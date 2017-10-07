@@ -16,7 +16,6 @@ import android.widget.Toast;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
-import com.okapp.data.helpers.LikesHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.domain.usecases.search.SearchUseCase;
 import com.okapp.helpers.NetworkHelper;
@@ -34,11 +33,11 @@ import butterknife.ButterKnife;
  * @author John Piser johnpiser@yahoo.com
  */
 
-public class SearchFragment extends Fragment implements SearchPresenter.ViewLayer, SearchRecyclerViewAdapter.TabRefreshListener{
+public class SearchFragment extends Fragment implements SearchPresenter.ViewLayer,
+                                                        SearchRecyclerViewAdapter.AdapterResponder {
 
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
-    @Inject LikesHelper likesHelper;
     @Inject NetworkHelper networkHelper;
 
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
@@ -56,9 +55,6 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         if (arguments != null) {
             searchUseCase = (SearchUseCase) arguments.get(FragmentArgs.SEARCH_TYPE);
         }
-
-
-
     }
 
     @Override
@@ -119,7 +115,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     public void loadProfiles(List<Profile> profiles) {
 
         if(searchRecyclerViewAdapter == null){
-            searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper, likesHelper, this);
+            searchRecyclerViewAdapter = new SearchRecyclerViewAdapter(profiles, imageHelper, this);
             recyclerView.setAdapter(searchRecyclerViewAdapter);
         }
         else{
@@ -142,6 +138,16 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         FragmentActivity activity = getActivity();
         if(activity != null)
         ((SearchActivity) activity).refreshTabs();
+    }
+
+    @Override
+    public void onProfileTapped(String username) {
+        searchPresenter.setLikedStateForUser(username);
+    }
+
+    @Override
+    public boolean userIsLiked(String username) {
+        return searchPresenter.userIsLiked(username);
     }
 
 

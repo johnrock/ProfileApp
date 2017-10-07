@@ -1,5 +1,6 @@
 package com.okapp.features.search;
 
+import com.okapp.data.helpers.LikesHelper;
 import com.okapp.data.helpers.LogHelper;
 import com.okapp.domain.usecases.UseCaseExecutor;
 import com.okapp.domain.usecases.search.SearchUseCase;
@@ -33,10 +34,12 @@ public class SearchPresenterImplTest {
     public static final String CRAZYGIRL = "crazygirl";
     public static final String DOPEGUY = "dopeguy";
     public static final String RADDUDE = "raddude";
+    public static final String TEST_USERNAME = "testUsername";
 
     SearchPresenterImpl searchPresenter;
 
     @Mock LogHelper logHelper;
+    @Mock LikesHelper likesHelper;
     @Mock SearchPresenter.ViewLayer viewLayer;
     @Mock UseCaseExecutor useCaseExecutor;
     @Mock Observable<List<com.okapp.data.models.Profile>> mockObservable;
@@ -49,7 +52,8 @@ public class SearchPresenterImplTest {
                 logHelper,
                 Schedulers.trampoline(),
                 Schedulers.trampoline(),
-                useCaseExecutor);
+                useCaseExecutor,
+                likesHelper);
 
         when(useCaseExecutor.executeUseCaseFor(any(SearchUseCase.class)))
                                      .thenReturn(Observable.just(makeObservableData()));
@@ -119,6 +123,33 @@ public class SearchPresenterImplTest {
         searchPresenter.bind(viewLayer, SearchUseCase.MATCH_PERCENTAGE);
         verifyShowData(argumentCaptor);
     }
+
+    @Test
+    public void shouldSetLikedStateToLikeForUser(){
+        when(likesHelper.userIsLiked(TEST_USERNAME)).thenReturn(false);
+        SearchPresenter.ViewLayer mockViewLayer = Mockito.mock(SearchPresenter.ViewLayer.class);
+        searchPresenter.viewLayer = mockViewLayer;
+
+        searchPresenter.setLikedStateForUser(TEST_USERNAME);
+        verify(likesHelper).likeUser(TEST_USERNAME);
+    }
+
+    @Test
+    public void shouldSetLikedStateToUnLikeForUser(){
+        when(likesHelper.userIsLiked(TEST_USERNAME)).thenReturn(true);
+        SearchPresenter.ViewLayer mockViewLayer = Mockito.mock(SearchPresenter.ViewLayer.class);
+        searchPresenter.viewLayer = mockViewLayer;
+
+        searchPresenter.setLikedStateForUser(TEST_USERNAME);
+        verify(likesHelper).unlikeUser(TEST_USERNAME);
+    }
+
+    @Test
+    public void shouldReportWhetherAUserIsLiked(){
+        searchPresenter.userIsLiked(TEST_USERNAME);
+        verify(likesHelper).userIsLiked(TEST_USERNAME);
+    }
+
 
     private void verifyShowData(ArgumentCaptor<List<Profile>> argumentCaptor) {
 
