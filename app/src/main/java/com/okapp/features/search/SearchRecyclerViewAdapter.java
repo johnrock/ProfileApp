@@ -39,7 +39,6 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         this.profiles = profiles;
         this.imageHelper = imageHelper;
         this.adapterResponder = adapterResponder;
-
     }
 
     @Override
@@ -87,6 +86,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             itemView.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            adapterResponder.onProfileTapped(username);
+        }
 
         public void bind(Profile profile) {
             this.username = profile.getUserName();
@@ -96,10 +99,10 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
             location.setText(profile.getLocation());
             matchPercentage.setText(profile.getMatchPercentage());
 
-            setBackgroundColor(profile.getUserName());
+            setBackgroundColor();
         }
 
-        private void setBackgroundColor(String userName) {
+        private void setBackgroundColor() {
             if(adapterResponder.userIsLiked(username)){
                 cardView.setBackgroundColor(imageView.getResources().getColor(R.color.highlightCard));
             }
@@ -107,11 +110,5 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
                 cardView.setBackgroundColor(imageView.getResources().getColor(R.color.white));
             }
         }
-
-        @Override
-        public void onClick(View v) {
-           adapterResponder.onProfileTapped(username);
-        }
-
     }
 }

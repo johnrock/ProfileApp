@@ -20,12 +20,12 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchPresenterImpl implements SearchPresenter {
 
-    ViewLayer viewLayer;
-    LogHelper logHelper;
+    final LogHelper logHelper;
     final Scheduler backgroundScheduler;
     final Scheduler uiScheduler;
-    UseCaseExecutor useCaseExecutor;
-    private LikesHelper likesHelper;
+    final UseCaseExecutor useCaseExecutor;
+    final LikesHelper likesHelper;
+    ViewLayer viewLayer;
     CompositeDisposable compositeDisposable;
 
     @Inject
