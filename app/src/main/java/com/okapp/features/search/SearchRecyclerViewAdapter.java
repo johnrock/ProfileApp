@@ -28,10 +28,9 @@ public class SearchRecyclerViewAdapter extends RecyclerView.Adapter<SearchRecycl
         boolean userIsLiked(String username);
     }
 
+    final ImageHelper imageHelper;
+    final AdapterResponder adapterResponder;
     List<Profile> profiles;
-    ImageHelper imageHelper;
-    AdapterResponder adapterResponder;
-
 
     public SearchRecyclerViewAdapter(List<Profile> profiles,
                                      ImageHelper imageHelper,
