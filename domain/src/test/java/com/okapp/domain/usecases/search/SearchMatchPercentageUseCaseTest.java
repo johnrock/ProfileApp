@@ -10,19 +10,24 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+
 
 /**
  * @author John Piser johnpiser@yahoo.com
  */
 public class SearchMatchPercentageUseCaseTest {
-
 
     public static final String CRAZYGIRL = "crazygirl";
     public static final String DOPEGUY = "dopeguy";
@@ -40,40 +45,84 @@ public class SearchMatchPercentageUseCaseTest {
     @Mock LogHelper logHelper;
     @Mock LikesHelper likesHelper;
 
-    Observable<List<Profile>> observable;
-
     @Before
     public void setup(){
         MockitoAnnotations.initMocks(this);
 
         searchMatchPercentageUseCase = new SearchMatchPercentageUseCase(searchRepository, likesHelper, logHelper);
 
-        when(searchRepository.byMatchPercentage()).thenReturn(Observable.just(makeObservableData()));
-
-        observable = searchMatchPercentageUseCase.execute();
+        when(searchRepository.byMatchPercentage()).thenReturn(Observable.just(profileList()));
     }
 
     @Test
-    public void shouldSearchSpecialBlendOnExecute(){
+    public void shouldSearchByMatchPercentageOnExecute(){
+        searchMatchPercentageUseCase.execute();
         verify(searchRepository).byMatchPercentage();
     }
 
-    //TODO: Add more sophisticated testing of the conditions of this use case
+    @Test
+    public void shouldReturnNoMoreThan6profiles() throws InterruptedException {
 
+        when(likesHelper.userIsLiked(anyString())).thenReturn(true);
 
-    private List<Profile> makeObservableData() {
-        List<com.okapp.data.models.Profile> list = new ArrayList<>();
+        TestObserver<List<Profile>> testObserver = searchMatchPercentageUseCase.execute().test();
 
-        list.add(new com.okapp.data.models.Profile(CRAZYGIRL));
-        list.add(new com.okapp.data.models.Profile(DOPEGUY));
-        list.add(new com.okapp.data.models.Profile(RADDUDE));
-        list.add(new com.okapp.data.models.Profile(JOEJOE));
-        list.add(new com.okapp.data.models.Profile(BEEBOP));
-        list.add(new com.okapp.data.models.Profile(COOLAMIGO));
-        list.add(new com.okapp.data.models.Profile(CUTEFOX));
-        list.add(new com.okapp.data.models.Profile(SLICKMUCHACHO));
-        list.add(new com.okapp.data.models.Profile(SWEETDARLING));
-        return list;
+        testObserver
+                .assertNoErrors()
+                .assertValueAt(0, list -> list.size() == 6);
     }
 
+    @Test
+    public void shouldOnlyReturnLikedUsers(){
+
+        when(likesHelper.userIsLiked(BEEBOP)).thenReturn(true);
+        when(likesHelper.userIsLiked(SLICKMUCHACHO)).thenReturn(true);
+        when(likesHelper.userIsLiked(COOLAMIGO)).thenReturn(true);
+        when(likesHelper.userIsLiked(DOPEGUY)).thenReturn(true);
+
+        TestObserver<List<Profile>> testObserver = searchMatchPercentageUseCase.execute().test();
+
+        testObserver
+                .assertNoErrors()
+                .assertValueAt(0, list -> list.size() == 4);
+
+        List<Profile> profiles = testObserver.values().get(0);
+        assertTrue(profiles.contains(new com.okapp.data.models.Profile(BEEBOP)));
+        assertTrue(profiles.contains(new com.okapp.data.models.Profile(SLICKMUCHACHO)));
+        assertTrue(profiles.contains(new com.okapp.data.models.Profile(COOLAMIGO)));
+        assertTrue(profiles.contains(new com.okapp.data.models.Profile(DOPEGUY)));
+    }
+
+    @Test
+    public void shouldOrderProfilesByMatchPercentageDescending(){
+        when(likesHelper.userIsLiked(anyString())).thenReturn(true);
+        TestObserver<List<Profile>> testObserver = searchMatchPercentageUseCase.execute().test();
+
+        testObserver
+                .assertNoErrors()
+                .assertValueAt(0, list -> list.size() == 6);
+
+        List<Profile> profileList = testObserver.values().get(0);
+        assertEquals( new com.okapp.data.models.Profile(SWEETDARLING), profileList.get(0));
+        assertEquals( new com.okapp.data.models.Profile(RADDUDE),      profileList.get(1));
+        assertEquals( new com.okapp.data.models.Profile(CRAZYGIRL),    profileList.get(2));
+        assertEquals( new com.okapp.data.models.Profile(COOLAMIGO),    profileList.get(3));
+        assertEquals( new com.okapp.data.models.Profile(BEEBOP),       profileList.get(4));
+        assertEquals( new com.okapp.data.models.Profile(JOEJOE),       profileList.get(5));
+    }
+
+
+    private List<Profile> profileList() {
+        return Arrays.asList(
+                new com.okapp.data.models.Profile(CRAZYGIRL, 9940),
+                new com.okapp.data.models.Profile(DOPEGUY, 5050),
+                new com.okapp.data.models.Profile(RADDUDE, 9950),
+                new com.okapp.data.models.Profile(JOEJOE, 8875),
+                new com.okapp.data.models.Profile(BEEBOP, 8975),
+                new com.okapp.data.models.Profile(COOLAMIGO, 9200),
+                new com.okapp.data.models.Profile(CUTEFOX, 6650),
+                new com.okapp.data.models.Profile(SLICKMUCHACHO, 2525),
+                new com.okapp.data.models.Profile(SWEETDARLING, 9999)
+        );
+    }
 }

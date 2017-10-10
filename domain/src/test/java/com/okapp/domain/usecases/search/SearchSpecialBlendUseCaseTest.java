@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
+import io.reactivex.observers.TestObserver;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -38,14 +39,21 @@ public class SearchSpecialBlendUseCaseTest {
         searchSpecialBlendUseCase = new SearchSpecialBlendUseCase(searchRepository, logHelper);
 
         when(searchRepository.bySpecialBlend()).thenReturn(Observable.just(makeObservableData()));
-
-        searchSpecialBlendUseCase.execute();
     }
 
     @Test
-    public void shouldSearchSpecialBlendOnExecute(){
-
+    public void shouldSearchBySpecialBlendOnExecute(){
+        searchSpecialBlendUseCase.execute();
         verify(searchRepository).bySpecialBlend();
+    }
+
+    @Test
+    public void shouldReturnProfileResults(){
+        TestObserver<List<Profile>> testObserver = searchSpecialBlendUseCase.execute().test();
+
+        testObserver
+                .assertNoErrors()
+                .assertValueAt(0, list -> list.size() == 3);
     }
 
     private List<Profile> makeObservableData() {

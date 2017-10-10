@@ -25,6 +25,12 @@ public class Profile {
         this.userName =  username;
     }
 
+    //For Testing
+    public Profile(String username, int match) {
+        this.userName =  username;
+        this.match = match;
+    }
+
     public String getUserId() {
         return userId;
     }
@@ -60,5 +66,20 @@ public class Profile {
                 ", location=" + location +
                 ", photo=" + photo +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Profile profile = (Profile) o;
+
+        return getUserName().equals(profile.getUserName());
+    }
+
+    @Override
+    public int hashCode() {
+        return getUserName().hashCode();
     }
 }
