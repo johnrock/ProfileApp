@@ -89,21 +89,17 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
         recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setHasFixedSize(true);
 
+        bind();
+
         return view;
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onStart()" + searchUseCase );
-        bind();
-    }
 
     @Override
-    public void onStop() {
-        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onStop()" + searchUseCase );
+    public void onDestroyView() {
+        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onDestroyView()" + searchUseCase );
         unbind();
-        super.onStop();
+        super.onDestroyView();
     }
 
     protected void bind() {
