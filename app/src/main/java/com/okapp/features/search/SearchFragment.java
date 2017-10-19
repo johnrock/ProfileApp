@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.okapp.R;
 import com.okapp.config.OkAppApplication;
+import com.okapp.data.helpers.LogHelper;
 import com.okapp.domain.helpers.ImageHelper;
 import com.okapp.domain.usecases.search.SearchUseCase;
 import com.okapp.helpers.NetworkHelper;
@@ -39,6 +40,7 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Inject SearchPresenter searchPresenter;
     @Inject ImageHelper imageHelper;
     @Inject NetworkHelper networkHelper;
+    @Inject LogHelper logHelper;
 
     @BindView(R.id.recyclerView) RecyclerView recyclerView;
     @BindView(R.id.progressBar)   ProgressBar progressBar;
@@ -50,6 +52,8 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onCreate()");
 
         Bundle arguments = getArguments();
         if (arguments != null) {
@@ -75,6 +79,8 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onCreateView()" + searchUseCase );
+
         View view = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, view);
 
@@ -89,11 +95,13 @@ public class SearchFragment extends Fragment implements SearchPresenter.ViewLaye
     @Override
     public void onStart() {
         super.onStart();
+        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onStart()" + searchUseCase );
         bind();
     }
 
     @Override
     public void onStop() {
+        logHelper.debug(OkAppApplication.LOGTAG, "SearchFragment: onStop()" + searchUseCase );
         unbind();
         super.onStop();
     }
