@@ -17,6 +17,8 @@ public class RetrofitRepository {
 
     public static final String API_ENDPOINT = "https://www.okcupid.com/";
 
+    private static final int cacheSize = 10 * 1024 * 1024; // 10MB
+
     LogHelper logHelper;
 
     public RetrofitRepository(LogHelper logHelper) {
@@ -24,6 +26,8 @@ public class RetrofitRepository {
     }
 
     protected Retrofit createRXRetrofit(String baseUrl){
+
+
 
         return new Retrofit.Builder()
                 .baseUrl(baseUrl)
@@ -35,7 +39,11 @@ public class RetrofitRepository {
 
     protected OkHttpClient createHttpClient() {
 
+        //Cache cache = new Cache(cacheDirectory(), cacheSize);
+
         OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+
+        //okHttpClientBuilder.cache(cache);
 
         if(logHelper.debugMode()){
             //Add as last interceptor
